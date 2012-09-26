@@ -1,5 +1,6 @@
 from useragents import search_strings
 from flask import request
+from functools import wraps
 
 def is_mobile(request):
     if hasattr(request, 'HTTP_X_OPERAMINI_FEATURES'):
