@@ -1,4 +1,4 @@
-from setuptools import Command, setup
+from setuptools import Command, setup, find_packages
 
 setup(
         name='mobiledetector',
