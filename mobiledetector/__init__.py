@@ -31,6 +31,7 @@ def detect_mobile(view):
        True or False depending on whether the request should be considered
        to come from a small-screen device such as a phone or a PDA"""
 
+    @wraps(view)
     def detected(*args, **kwargs):
         request.mobile = is_mobile(request)
         return view(*args, **kwargs)
