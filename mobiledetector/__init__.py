@@ -1,25 +1,29 @@
 from useragents import search_strings
+from webob import Request
 
 class Middleware(object):
     def __init__(self, app):
         """Adds a "mobile" attribute to the request which is True or False
            depending on whether the request should be considered to come from a
            small-screen device such as a phone or a PDA"""
-        request = app.request
+        self.app = app
+
+    def __call__(self, environ, start_response):
+        request = Request(environ)
+
+        request.mobile = False
 
         if hasattr(request, 'HTTP_X_OPERAMINI_FEATURES'):
-            #Then it's running opera mini. 'Nuff said.
-            #Reference from:
-            # http://dev.opera.com/articles/view/opera-mini-request-headers/
+            # Then it's running opera mini. 'Nuff said.
+            # Reference from:
+            #  http://dev.opera.com/articles/view/opera-mini-request-headers/
             request.mobile = True
-            return None
 
         if hasattr(request, 'HTTP_ACCEPT'):
             s = request.HTTP_ACCEPT.lower()
             if 'application/vnd.wap.xhtml+xml' in s:
                 # Then it's a wap browser
                 request.mobile = True
-                return None
 
         if hasattr(request, 'HTTP_USER_AGENT'):
             # This takes the most processing. Surprisingly enough, when I
@@ -30,11 +34,9 @@ class Middleware(object):
             for ua in search_strings:
                 if ua in s:
                     request.mobile = True
-                    return None
 
-        #Otherwise it's not a mobile
-        request.mobile = False
-        return None
+        resp = request.get_response(self.app)
+        return resp(environ, start_response)
 
 def detect_mobile(view):
     """View Decorator that adds a "mobile" attribute to the request which is
