@@ -1,11 +1,11 @@
 from useragents import search_strings
 
 class Middleware(object):
-    @staticmethod
-    def process_request(request):
+    def __init__(self, app):
         """Adds a "mobile" attribute to the request which is True or False
            depending on whether the request should be considered to come from a
            small-screen device such as a phone or a PDA"""
+        request = app.request
 
         if hasattr(request, 'HTTP_X_OPERAMINI_FEATURES'):
             #Then it's running opera mini. 'Nuff said.
