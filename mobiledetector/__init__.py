@@ -23,7 +23,7 @@ def is_mobile(request):
         for ua in search_strings:
             if ua in s:
                 return True
-    return false
+    return False
 
 
 def detect_mobile(view):
