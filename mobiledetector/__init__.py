@@ -1,4 +1,5 @@
 from useragents import search_strings
+from flask import request
 
 def is_mobile(request):
     if hasattr(request, 'HTTP_X_OPERAMINI_FEATURES'):
@@ -30,9 +31,9 @@ def detect_mobile(view):
        True or False depending on whether the request should be considered
        to come from a small-screen device such as a phone or a PDA"""
 
-    def detected(request, *args, **kwargs):
+    def detected(*args, **kwargs):
         request.mobile = is_mobile(request)
-        return view(request, *args, **kwargs)
+        return view(*args, **kwargs)
     detected.__doc__ = "%s\n[Wrapped by detect_mobile which detects if the request is from a phone]" % view.__doc__
     return detected
 
