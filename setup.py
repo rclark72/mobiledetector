@@ -8,5 +8,6 @@ setup(
         author='Robert Clark',
         author_email='robert@bablmedia.com',
         packages=['mobiledetector'],
-        test_suite='mobiledetector.tests'
+        test_suite='mobiledetector.tests',
+        include_package_data=True
 )
