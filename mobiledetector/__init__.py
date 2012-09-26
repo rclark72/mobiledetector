@@ -1,4 +1,3 @@
-
 from useragents import search_strings
 
 class Middleware(object):
@@ -8,26 +7,26 @@ class Middleware(object):
            depending on whether the request should be considered to come from a
            small-screen device such as a phone or a PDA"""
 
-        if request.META.has_key("HTTP_X_OPERAMINI_FEATURES"):
+        if hasattr(request, 'HTTP_X_OPERAMINI_FEATURES'):
             #Then it's running opera mini. 'Nuff said.
             #Reference from:
             # http://dev.opera.com/articles/view/opera-mini-request-headers/
             request.mobile = True
             return None
 
-        if request.META.has_key("HTTP_ACCEPT"):
-            s = request.META["HTTP_ACCEPT"].lower()
+        if hasattr(request, 'HTTP_ACCEPT'):
+            s = request.HTTP_ACCEPT.lower()
             if 'application/vnd.wap.xhtml+xml' in s:
                 # Then it's a wap browser
                 request.mobile = True
                 return None
 
-        if request.META.has_key("HTTP_USER_AGENT"):
+        if hasattr(request, 'HTTP_USER_AGENT'):
             # This takes the most processing. Surprisingly enough, when I
             # Experimented on my own machine, this was the most efficient
             # algorithm. Certainly more so than regexes.
             # Also, Caching didn't help much, with real-world caches.
-            s = request.META["HTTP_USER_AGENT"].lower()
+            s = request.HTTP_USER_AGENT.lower()
             for ua in search_strings:
                 if ua in s:
                     request.mobile = True

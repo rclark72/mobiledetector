@@ -1,26 +1,26 @@
 from unittest import TestSuite, TestCase, TextTestRunner, TestLoader
 
-import minidetector
+import mobiledetector
 
 import os.path
 
 
 class DummyRequest(object):
     def __init__(self, useragent):
-        self.META = {'HTTP_USER_AGENT': useragent}
+        self.HTTP_USER_AGENT = useragent
 
 class TestHTTPHeaders(TestCase):
     """Everything that Isn't a User-Agent Header"""
     def test_wap(self):
         request = DummyRequest("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8b5) Gecko/20051019 Flock/0.4 Firefox/1.0+")
-        request.META['HTTP_ACCEPT'] = 'application/vnd.wap.xhtml+xml'
-        minidetector.Middleware.process_request(request)
+        request.HTTP_ACCEPT = 'application/vnd.wap.xhtml+xml'
+        mobiledetector.Middleware.process_request(request)
         self.assert_(request.mobile, "WAP not Detected")
         
     def test_opera_mini(self):
         request = DummyRequest("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8b5) Gecko/20051019 Flock/0.4 Firefox/1.0+")
-        request.META['HTTP_X_OPERAMINI_FEATURES'] = 'secure'
-        minidetector.Middleware.process_request(request)
+        request.HTTP_X_OPERAMINI_FEATURES = 'secure'
+        mobiledetector.Middleware.process_request(request)
         self.assert_(request.mobile, "Opera Mini not Detected")
 
 
@@ -30,7 +30,7 @@ def MobileDetectionFactory(uas, expected):
 
         def testUA(self, ua):
             request = DummyRequest(ua)
-            minidetector.Middleware.process_request(request)
+            mobiledetector.Middleware.process_request(request)
             if self.expected:
                 self.assert_(request.mobile,
                              "Mobile Not Detected: %s" % ua)
