@@ -34,7 +34,7 @@ def detect_mobile(view):
 
     @wraps(view)
     def detected(*args, **kwargs):
-        g.mobile = is_mobile(request)
+        request.mobile = is_mobile(request)
         return view(*args, **kwargs)
     detected.__doc__ = "%s\n[Wrapped by detect_mobile which detects if the request is from a phone]" % view.__doc__
     return detected
