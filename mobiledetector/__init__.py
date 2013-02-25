@@ -1,5 +1,5 @@
 from useragents import search_strings
-from flask import request
+from flask import request, g
 from functools import wraps
 
 def is_mobile(request):
@@ -34,7 +34,7 @@ def detect_mobile(view):
 
     @wraps(view)
     def detected(*args, **kwargs):
-        request.mobile = is_mobile(request)
+        g.mobile = is_mobile(request)
         return view(*args, **kwargs)
     detected.__doc__ = "%s\n[Wrapped by detect_mobile which detects if the request is from a phone]" % view.__doc__
     return detected
